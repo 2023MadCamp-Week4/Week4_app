@@ -12,13 +12,20 @@ import {
 import Toast from "react-native-toast-message";
 let imagePath = require("../../assets/map.png");
 let buttonImagePath = require("../../assets/kakao_login.png");
-import AppLoading from "expo-app-loading";
-import { useFonts } from "expo-font";
 import * as Font from "expo-font";
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [isFont, setIsFont] = useState(false);
+
+  useEffect(async () => {
+    await Font.loadAsync({
+      Titlefont: require("../../assets/fonts/Titlefont.ttf"),
+    });
+    setIsFont(true);
+  }, []);
 
   const handleLogin2 = async () => {
     try {
@@ -52,19 +59,21 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={imagePath} />
-        <Text
-          style={{
-            fontFamily: "Titlefont",
-            fontSize: 30,
-            fontWeight: "bold",
-            marginTop: 10,
-          }}
-        >
-          너 어디야!
-        </Text>
-      </View>
+      {isFont && (
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={imagePath} />
+          <Text
+            style={{
+              fontFamily: "Titlefont",
+              fontSize: 30,
+              fontWeight: "bold",
+              marginTop: 10,
+            }}
+          >
+            너 어디야!
+          </Text>
+        </View>
+      )}
       <TextInput
         style={styles.input}
         value={username}

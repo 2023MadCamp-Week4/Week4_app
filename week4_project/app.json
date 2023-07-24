@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.madcampweek2"
@@ -20,13 +22,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.madcampweek4"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "REACT_APP_server_uri": "https://week4appserver-production.up.railway.app"
+      "REACT_APP_server_uri": "https://week4appserver-production.up.railway.app",
+      "eas": {
+        "projectId": "8e48b4f4-6a25-4870-bc51-87e1fd3b5058"
+      }
     }
   }
 }
