@@ -1,64 +1,36 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
-import MultiSelect from 'react-native-multiple-select';
-
-const items = [{
-    id: '92iijs7yta',
-    name: 'Ondo'
-  }, {
-    id: 'a0s0a8ssbsd',
-    name: 'Ogun'
-  }, {
-    id: '16hbajsabsd',
-    name: 'Calabar'
-  }, {
-    id: 'nahs75a5sg',
-    name: 'Lagos'
-  }, {
-    id: '667atsas',
-    name: 'Maiduguri'
-  }, {
-    id: 'hsyasajs',
-    name: 'Anambra'
-  }, {
-    id: 'djsjudksjd',
-    name: 'Benue'
-  }, {
-    id: 'sdhyaysdj',
-    name: 'Kaduna'
-  }, {
-    id: 'suudydjsjd',
-    name: 'Abuja'
-    }
-];
+import React, { Component } from "react";
+import { View } from "react-native";
+import MultiSelect from "react-native-multiple-select";
+import styles from "../styles/styles";
 
 class MultiSelectExample extends Component {
-
   state = {
-    selectedItems : []
+    selectedItems: [],
   };
 
-  
-  onSelectedItemsChange = selectedItems => {
+  onSelectedItemsChange = (selectedItems) => {
     this.setState({ selectedItems });
     this.props.setModalMembers(selectedItems);
+    console.log(selectedItems);
   };
 
   render() {
     const { selectedItems } = this.state;
 
     return (
-      <View >
+      <View style={styles.input}>
         <MultiSelect
           hideTags
-          items={items}
-          uniqueKey="id"
-          ref={(component) => { this.multiSelect = component }}
+          items={this.props.allUserList}
+          uniqueKey="kakao_id"
+          ref={(component) => {
+            this.multiSelect = component;
+          }}
           onSelectedItemsChange={this.onSelectedItemsChange}
           selectedItems={selectedItems}
-          selectText="Pick Items"
+          selectText="친구를 골라보세요!"
           searchInputPlaceholderText="Search Items..."
-          onChangeInput={ (text)=> console.log(text)}
+          onChangeInput={(text) => console.log(text)}
           tagRemoveIconColor="#CCC"
           tagBorderColor="#CCC"
           tagTextColor="#CCC"
@@ -66,13 +38,13 @@ class MultiSelectExample extends Component {
           selectedItemIconColor="#CCC"
           itemTextColor="#000"
           displayKey="name"
-          searchInputStyle={{ color: '#CCC' }}
+          searchInputStyle={{ color: "#CCC" }}
           submitButtonColor="#CCC"
           submitButtonText="Submit"
         />
         <View>
           {this.multiSelect &&
-          this.multiSelect.getSelectedItemsExt(selectedItems)}
+            this.multiSelect.getSelectedItemsExt(selectedItems)}
         </View>
       </View>
     );

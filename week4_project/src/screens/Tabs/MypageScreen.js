@@ -33,6 +33,7 @@ function MypageScreen({ userInfo }) {
         `${process.env.REACT_APP_server_uri}/api/past_appointments?id=${userInfo.id}`
       );
       const pastAppointmentsData = await response.json();
+      console.log(pastAppointmentsData);
       setPastAppointments(pastAppointmentsData.data || []);
     }
 
