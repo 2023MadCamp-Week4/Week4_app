@@ -28,6 +28,7 @@ const Signup = () => {
       pw: password,
       phone_number: phonenumber,
       location: "Default Location",
+      profileURL: userInfo.kakao_account.profile.profile_image_url,
     };
     console.log(userData);
 

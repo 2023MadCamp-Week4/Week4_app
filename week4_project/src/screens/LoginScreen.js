@@ -20,11 +20,15 @@ const LoginScreen = ({ navigation }) => {
 
   const [isFont, setIsFont] = useState(false);
 
-  useEffect(async () => {
-    await Font.loadAsync({
-      Titlefont: require("../../assets/fonts/Titlefont.ttf"),
-    });
-    setIsFont(true);
+  useEffect(() => {
+    const loadFont = async () => {
+      await Font.loadAsync({
+        Titlefont: require("../../assets/fonts/Titlefont.ttf"),
+      });
+      setIsFont(true);
+    };
+
+    loadFont();
   }, []);
 
   const handleLogin2 = async () => {
