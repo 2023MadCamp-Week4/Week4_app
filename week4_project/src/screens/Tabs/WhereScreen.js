@@ -16,7 +16,7 @@ const socket = io(socketEndpoint,{transports: ['websocket']});
 
 function WhereScreen({ userInfo, route, navigation }) {
   const [latitude, setLatitude] = useState(37.402056);
-  const [longtitude, setLongtitude] = useState(127.108212);
+  const [longitude, setLongitude] = useState(127.108212);
   const [locationList, setLocationList] = useState([
     {
         user: "a",                      
@@ -38,10 +38,9 @@ function WhereScreen({ userInfo, route, navigation }) {
   useEffect(() => {  
     socket.on('connect', () => {
             console.log('Connected to server!');
-            
             //자신의 위치 json으로 전송
             const location = {
-                user: "a",                      
+                user: userInfo.id,                      
                 latitude: latitude,
                 longitude: longitude
             };
@@ -70,7 +69,7 @@ function WhereScreen({ userInfo, route, navigation }) {
       .then(location => {
           console.log(location);
           setLatitude(location.coords.latitude);
-          setLongtitude(location.coords.longtitude)
+          setLongitude(location.coords.longitude)
       })
       .catch(error => {
           console.error(error);
@@ -81,9 +80,9 @@ function WhereScreen({ userInfo, route, navigation }) {
       return(
           <TouchableOpacity style={styles.itemBox}>
               <View style={styles.valueBox}>
-                      <Text>{item.name}</Text>
-                      <Text style={styles.nickname}>{item.id}</Text>
-                      <Text>{item.location}</Text>
+                  <Text>{item.name}</Text>
+                  <Text style={styles.nickname}>{item.id}</Text>
+                  <Text></Text>
               </View>
           </TouchableOpacity>
       );
@@ -98,14 +97,13 @@ function WhereScreen({ userInfo, route, navigation }) {
                 longitude: itemData.location.longitude,
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
-
               }}
             provider={PROVIDER_GOOGLE}
       >
         <Marker
             coordinate={{
             latitude:  latitude,
-            longitude: longtitude,
+            longitude: longitude,
           }}
             pinColor="#2D63E2"
             title="하이"
