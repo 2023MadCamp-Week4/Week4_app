@@ -8,64 +8,55 @@ import * as Location from 'expo-location';
 import styles from "../../styles/styles";
 import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapView from 'react-native-maps';
+import io from 'socket.io-client';
+
+const socketEndpoint = "http://172.10.5.169:80";
+const socket = io(socketEndpoint,{transports: ['websocket']});
 
 
 function WhereScreen({ userInfo, route, navigation }) {
-  console.log(userInfo);
   const [latitude, setLatitude] = useState(37.402056);
   const [longtitude, setLongtitude] = useState(127.108212);
-  const [memberList, setMemberList] = useState([
-      {
-          id:1, 
-          kakao_id:1,
-          name:"hanmin",
-          user_id:"hanhan",
-          pw:"aaa",
-          phone_number:"010-9913-6179",
-          location:"ddd"
-      },
-      {
-          id:2, 
-          kakao_id:2,
-          name:"jihyeon ",
-          user_id:"jijian",
-          pw:"aaa",
-          phone_number:"010-9913-6179",
-          location:"ddd"
-      }
-  ])
+  const [locationList, setLocationList] = useState([
+    {
+        user: "a",                      
+        latitude: 37.51239355407258,
+        longitude: 127.08445797334993,
+        isFocused: false
+    },
+    {
+        user: "b",                      
+        latitude: 37.547391660236286, 
+        longitude: 127.04602265013317,
+        isFocused: false
+    }
+    ])
+  const itemData = route.params?.itemData;
 
-  const ws = useRef(null);
-  useEffect(() => {
-    ws.current = new WebSocket(`ws://172.10.5.169:80`)
-    console.log(ws.current)
-    ws.current.onopen = () => {
-        // connection opened
-        console.log('connected')
-        // send a message
-    };
 
-    ws.current.onmessage = (e) => {
-        // a message was received
-        console.log(e.data);
-    };
 
-    ws.current.onerror = (e) => {
-        // an error occurred
-        console.log(e.message);
-    };
+  useEffect(() => {  
+    socket.on('connect', () => {
+            console.log('Connected to server!');
+            
+            //자신의 위치 json으로 전송
+            const location = {
+                user: "a",                      
+                latitude: latitude,
+                longitude: longitude
+            };
+            const locationJsonString = JSON.stringify(location);
+            socket.emit('location', locationJsonString);
+        });
 
-    ws.current.onclose = (e) => {
-        // connection closed
-        console.log(e.code, e.reason);
-    };
+    // 다른 사람의 위치를 전달 받은 후, LocationList state 로 저장한 뒤, marker로 띄우기. 
+    socket.on('location', (data) => {
+        setLocationList(data)
+    });
 
-    return () => {
-        ws.current.close();
-    };
 }, [])
   
-  /* 현위치 가져오기 .
+  // 현위치 가져오기 .
   async function getLocationAsync() {
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
@@ -83,7 +74,7 @@ function WhereScreen({ userInfo, route, navigation }) {
       })
       .catch(error => {
           console.error(error);
-  });*/
+  });
 
   // 친구 목록 
   const ItemView = ({item}) => {
@@ -103,8 +94,11 @@ function WhereScreen({ userInfo, route, navigation }) {
       <MapView // 셀프클로징해도 되지만 후의 마커를 위해서
         style={styles.map}
         initialRegion={{
-                latitude: latitude,
-                longitude: longtitude,
+                latitude: itemData.location.latitude,
+                longitude: itemData.location.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+
               }}
             provider={PROVIDER_GOOGLE}
       >
@@ -117,9 +111,18 @@ function WhereScreen({ userInfo, route, navigation }) {
             title="하이"
             description="테스트"
           />
+          {locationList.map( i => (
+            <Marker
+                coordinate={{ latitude: i.latitude, longitude: i.longitude }}
+                title={i.user}
+                description={i.user}
+                pinColor={i.isFocused ? "blue" : "red"} // 포커싱 여부에 따라 색상 변경
+            />
+        ))}
       </MapView>
       <FlatList
-          data={memberList}
+          style={styles.flatList}
+          data={locationList}
           renderItem={ItemView}>
       </FlatList>
     </View>
