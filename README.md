@@ -1,9 +1,9 @@
-# Week4_app
-## 너 어디야!
-###👥 팀원
+# Week4_app 너 어디야!
+
+### 👥 팀원
 김서현, 남지현
 
-###📍 친구와 약속 장소를 쉽게 찾고 공유하는 어플! 📍
+### 📍 친구와 약속 장소를 쉽게 찾고 공유하는 어플! 📍
 
 "너 어디야!"는 친구와의 약속 장소를 쉽고 빠르게 찾고 공유할 수 있는 모바일 어플리케이션입니다.
 
@@ -13,16 +13,20 @@
 
 자신만의 약속 리스트를 만들고, 친구와의 만남을 효과적으로 계획하고 싶다면 지금 바로 "너 어디야!"에 가입해보세요! "너 어디야!"에서 여러분을 기다리고 있습니다. "너 어디야!" 
 
-📱 UI 및 기능 소개
+### 📱 UI 및 기능 소개
 약속 리스트 화면
+
 ![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/b2432bc7-1670-4185-9363-671b36aeb682)
 
 어디야 화면
+
 ![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/73173699-5358-420e-9144-b48d1616f73f)
 
 친구 화면
+
 ![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/98036c75-cfce-4c56-8fa3-a2b213bb1263)
 
 마이페이지 화면
+
 ![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/40cdbe57-a4a3-4212-ac94-8b31c1bb3b55)
 
