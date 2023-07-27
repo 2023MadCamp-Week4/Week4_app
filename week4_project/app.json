@@ -23,7 +23,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.madcampweek4"
+      "package": "com.madcampweek4",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCgWeh53QjAlUl9ECiymJ5rHWHrbJrNvPU"
+        }
+       }
     },
     "web": {
       "favicon": "./assets/favicon.png"

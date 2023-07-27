@@ -9,6 +9,7 @@ import styles from "../../styles/styles";
 import { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapView from 'react-native-maps';
 import io from 'socket.io-client';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const socketEndpoint = "http://172.10.5.169:80";
 const socket = io(socketEndpoint,{transports: ['websocket']});
@@ -32,7 +33,7 @@ function WhereScreen({ userInfo, route, navigation }) {
     }
     ])
   const itemData = route.params?.itemData;
-
+  console.log(itemData, "ITEMdata")
 
 
   useEffect(() => {  
@@ -77,6 +78,7 @@ function WhereScreen({ userInfo, route, navigation }) {
 
   // 친구 목록 
   const ItemView = ({item}) => {
+    console.log(item,"friend")  
       return(
           <TouchableOpacity style={styles.itemBox}>
               <View style={styles.valueBox}>
@@ -88,8 +90,22 @@ function WhereScreen({ userInfo, route, navigation }) {
       );
   };
 
+
   return (
+   
     <View style={styles.container}>
+      <GooglePlacesAutocomplete
+        placeholder='Search'
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details,"DEE");
+        }}
+        query={{
+          key: 'AIzaSyCgWeh53QjAlUl9ECiymJ5rHWHrbJrNvPU',
+          language: 'en',
+        }}
+    />
+    
       <MapView // 셀프클로징해도 되지만 후의 마커를 위해서
         style={styles.map}
         initialRegion={{
@@ -100,6 +116,7 @@ function WhereScreen({ userInfo, route, navigation }) {
               }}
             provider={PROVIDER_GOOGLE}
       >
+
         <Marker
             coordinate={{
             latitude:  latitude,
@@ -124,8 +141,8 @@ function WhereScreen({ userInfo, route, navigation }) {
           renderItem={ItemView}>
       </FlatList>
     </View>
-  );
-}
+   );
+ }
 
 
 export default WhereScreen;
