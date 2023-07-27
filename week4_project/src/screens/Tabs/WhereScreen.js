@@ -24,6 +24,7 @@ function WhereScreen({ userInfo }) {
   const [alert, setAlert] = useState(null);
   const [selectedMemberName, setSelectedMemberName] = useState(null);
   const [receivedRequest2, setReceivedRequest2] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const [latitude, setLatitude] = useState(37.402056);
   const [longitude, setLongitude] = useState(127.108212);
@@ -103,21 +104,25 @@ function WhereScreen({ userInfo }) {
 
   const handlePress = (appointment) => {
     setSelectedAppointment(appointment);
+    setSelectedItem(appointment);
     setModalVisible(true);
   };
 
   // Request 탐지
   const checkRequests = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_server_uri}/api/check_requests?id=${userInfo.id}`
-    );
-    const data = await response.json();
-    if (data && data.length > 0) {
-      if (Flagflag) {
-        console.log("Request가 있습니다!");
-        console.log(data);
-        setAlert(data[0]);
-        setModalVisible2(true);
+    console.log("CheckRequests Flagflag: ", Flagflag);
+    if (Flagflag) {
+      const response = await fetch(
+        `${process.env.REACT_APP_server_uri}/api/check_requests?id=${userInfo.id}`
+      );
+      const data = await response.json();
+      if (data && data.length > 0) {
+        if (Flagflag) {
+          console.log("Request가 있습니다!");
+          console.log(data);
+          setAlert(data[0]);
+          setModalVisible2(true);
+        }
       }
     }
   };
@@ -142,14 +147,18 @@ function WhereScreen({ userInfo }) {
     return () => clearInterval(intervalId);
   }, []);
   useEffect(() => {
-    const intervalId = setInterval(checkRequests, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+    if (Flagflag) {
+      const intervalId = setInterval(checkRequests, 5000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [Flagflag]);
 
   // 수락 버튼 동작
   const handleAccept = async () => {
     setAlert(null);
     setFlagflag(false);
+    console.log("Flagflag: ", Flagflag);
     const location = await getLocationAsync();
     const response1 = await fetch(
       `${process.env.REACT_APP_server_uri}/api/update_request1`,
@@ -281,6 +290,7 @@ function WhereScreen({ userInfo }) {
 
   const renderItem = ({ item }) => {
     const date = new Date(item.times);
+
     const formattedTime = date.toLocaleString("ko-KR", {
       year: "numeric",
       month: "2-digit",
@@ -311,9 +321,15 @@ function WhereScreen({ userInfo }) {
     <SafeAreaView style={styles.container}>
       <Text style={styles.profile_title}>오늘의 약속</Text>
       <View style={styles.separator} />
-      {selectedAppointment && selectedAppointment.latitude && selectedAppointment.longitude && receivedRequest2 &&
-        <MapScreen selectedAppointment={selectedAppointment} receivedRequest2={receivedRequest2}/>
-      }
+      {selectedAppointment &&
+        selectedAppointment.latitude &&
+        selectedAppointment.longitude &&
+        receivedRequest2 && (
+          <MapScreen
+            selectedAppointment={selectedItem}
+            receivedRequest2={receivedRequest2}
+          />
+        )}
       <FlatList
         contentContainerStyle={styles.list}
         data={appointments}
