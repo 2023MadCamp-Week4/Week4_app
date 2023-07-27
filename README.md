@@ -14,19 +14,22 @@
 자신만의 약속 리스트를 만들고, 친구와의 만남을 효과적으로 계획하고 싶다면 지금 바로 "너 어디야!"에 가입해보세요! "너 어디야!"에서 여러분을 기다리고 있습니다. "너 어디야!" 
 
 ### 📱 UI 및 기능 소개
+
 약속 리스트 화면
 
-![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/b2432bc7-1670-4185-9363-671b36aeb682)
+<img src="https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/b2432bc7-1670-4185-9363-671b36aeb682"  width="200" height="400"/>
 
 어디야 화면
 
-![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/73173699-5358-420e-9144-b48d1616f73f)
+<img src="https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/73173699-5358-420e-9144-b48d1616f73f"  width="200" height="400"/>
 
 친구 화면
 
-![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/98036c75-cfce-4c56-8fa3-a2b213bb1263)
+<img src="https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/98036c75-cfce-4c56-8fa3-a2b213bb1263"  width="200" height="400"/>
 
 마이페이지 화면
 
-![image](https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/40cdbe57-a4a3-4212-ac94-8b31c1bb3b55)
+<img src="https://github.com/2023MadCamp-Week4/Week4_app/assets/86822199/40cdbe57-a4a3-4212-ac94-8b31c1bb3b55"  width="200" height="400"/>
+
+
 
