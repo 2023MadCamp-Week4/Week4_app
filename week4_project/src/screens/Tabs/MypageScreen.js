@@ -250,6 +250,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     flex: 1,
+    marginLeft:10,
+    marginRight:10
   },
   centercontainer: {
     backgroundColor: "white",
@@ -265,11 +267,11 @@ const styles = StyleSheet.create({
   profile_title: {
     padding: 20,
     alignItems: "flex-start",
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
   },
   modalText2: {
-    fontSize: 20,
+    fontSize: 15,
     marginBottom: 20,
     textAlign: "center",
     fontWeight: "bold",
@@ -290,19 +292,19 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     marginBottom: 20,
-    fontSize: 20,
+    fontSize: 15,
     color: "gray",
   },
   text2: {
     textAlign: "center",
     marginBottom: 20,
-    fontSize: 20,
+    fontSize: 15,
     color: "gray",
   },
   text3: {
     textAlign: "center",
     marginBottom: 20,
-    fontSize: 20,
+    fontSize: 15,
     color: "black",
   },
   separator: {

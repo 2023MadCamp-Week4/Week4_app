@@ -3,9 +3,10 @@ import MapView, { Marker } from 'react-native-maps';
 
 export default function MapScreen({selectedAppointment, receivedRequest2}) {
     // Ensure selectedAppointment is not null and contains the required properties
-console.log(receivedRequest2, "여깅ㅇㅇㅇㅇㅇㅇㅇ");
-const lng= Number(selectedAppointment.longitude);
-const lat= Number(selectedAppointment.latitude);
+
+console.log(selectedAppointment);
+const lng= Number(selectedAppointment.location.longitude);
+const lat= Number(selectedAppointment.location.latitude);
 
 const friend_lat = Number(receivedRequest2.latitude);
 const friend_lng = Number(receivedRequest2.longitude);
@@ -20,7 +21,7 @@ const region = {
   };
   return (
     <MapView
-      style={{ flex: 1 }}
+      style={{ flex: 1, marginBottom:10}}
       region={region}
     >
       <Marker

@@ -32,6 +32,7 @@ function WhereScreen({ userInfo }) {
 
   const [userName, setUserName] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedItem, setSelectedItem] =useState(null);
 
   const fetchUserName = async (userId) => {
     try {
@@ -103,9 +104,9 @@ function WhereScreen({ userInfo }) {
 
   const handlePress = (appointment) => {
     setSelectedAppointment(appointment);
+    setSelectedItem(appointment);
     setModalVisible(true);
   };
-
   // Request 탐지
   const checkRequests = async () => {
     const response = await fetch(
@@ -312,15 +313,18 @@ function WhereScreen({ userInfo }) {
       <Text style={styles.profile_title}>오늘의 약속</Text>
       <View style={styles.separator} />
       {selectedAppointment && selectedAppointment.latitude && selectedAppointment.longitude && receivedRequest2 &&
-        <MapScreen selectedAppointment={selectedAppointment} receivedRequest2={receivedRequest2}/>
+        <MapScreen selectedAppointment={selectedItem} receivedRequest2={receivedRequest2}/>
       }
-      <FlatList
-        contentContainerStyle={styles.list}
-        data={appointments}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-      />
+      <View
+        style={{flex:1, }}>
+        <FlatList
+          contentContainerStyle={styles.list}
+          data={appointments}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
       <Modal
         animationType="slide"
         transparent={true}
