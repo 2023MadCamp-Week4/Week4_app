@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
-        Titlefont: require("../../assets/fonts/Titlefont.ttf"),
+        Titlefont: require("../../assets/fonts/Titlefont2.ttf"),
       });
       setIsFont(true);
     };

@@ -9,14 +9,14 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native";
 import MultiSelectExample from "../../common/multiSelect";
 import styles from "../../styles/styles";
 import axios from "axios";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import Icon from 'react-native-vector-icons/Ionicons';
-
+import Icon from "react-native-vector-icons/Ionicons";
 
 function MainScreen({ userInfo, navigation }) {
   const [appmtList, setAppmtList] = useState([]);
@@ -64,9 +64,9 @@ function MainScreen({ userInfo, navigation }) {
     const [dateMode, setDateMode] = useState("date");
     const [dateShow, setdateShow] = useState(false);
 
-      // 현재 날짜와 시간을 구하는 함수
+    // 현재 날짜와 시간을 구하는 함수
     const getCurrentDateTime = () => {
-        return new Date();
+      return new Date();
     };
     //on date Change
     const onChange = (event, selectedDate) => {
@@ -98,14 +98,14 @@ function MainScreen({ userInfo, navigation }) {
     };
 
     const saveBtnOnPress = async () => {
-        //appLocation  구하기.
-        const currentDate = getCurrentDateTime();
-        if (date < currentDate) {
-            // 모달에서 선택한 날짜와 시간이 현재 날짜와 시간보다 이전인 경우
-            alert("과거 날짜와 시간으로 약속을 추가할 수 없습니다.");
-            return;
-        }
-        function formatDate(date) {
+      //appLocation  구하기.
+      const currentDate = getCurrentDateTime();
+      if (date < currentDate) {
+        // 모달에서 선택한 날짜와 시간이 현재 날짜와 시간보다 이전인 경우
+        alert("과거 날짜와 시간으로 약속을 추가할 수 없습니다.");
+        return;
+      }
+      function formatDate(date) {
         var yyyy = date.getUTCFullYear();
         var mm = String(date.getUTCMonth() + 1).padStart(2, "0"); // months from 0 to 11
         var dd = String(date.getUTCDate()).padStart(2, "0");
@@ -114,40 +114,43 @@ function MainScreen({ userInfo, navigation }) {
         var ss = String(date.getUTCSeconds()).padStart(2, "0");
 
         return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + mi + ":" + ss;
-        }
-        const newDate = formatDate(date); // 출력: "2020-08-22 08:15:30"
-        const newData = {
-            members: modalMembers,
-            times: newDate,
-            place: modalPlace,
-            content: modalContent,
-            location: modalLocation,
-        };
-                console.log(newData, "checking Null");
-        if (
-               newData.members.length === 0 || newData.place === "" || newData.content === "" || newData.location === "" 
-        ) {
-            // One of the newData values is null or undefined
-            alert("모든 필드를 채워주세요!");
-            return; // Stop the function execution
-        }
+      }
+      const newDate = formatDate(date); // 출력: "2020-08-22 08:15:30"
+      const newData = {
+        members: modalMembers,
+        times: newDate,
+        place: modalPlace,
+        content: modalContent,
+        location: modalLocation,
+      };
+      console.log(newData, "checking Null");
+      if (
+        newData.members.length === 0 ||
+        newData.place === "" ||
+        newData.content === "" ||
+        newData.location === ""
+      ) {
+        // One of the newData values is null or undefined
+        alert("모든 필드를 채워주세요!");
+        return; // Stop the function execution
+      }
 
-        fetch(`${process.env.REACT_APP_server_uri}/api/appointment_add`, {
+      fetch(`${process.env.REACT_APP_server_uri}/api/appointment_add`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
-            body: JSON.stringify(newData),
-        })
+        body: JSON.stringify(newData),
+      })
         .then((response) => response.json())
         .then((data) => {
-            console.log("Success:", data);
-            appmtList.push(newData);
+          console.log("Success:", data);
+          appmtList.push(newData);
         })
         .catch((error) => {
-            console.error("Error:", error);
+          console.error("Error:", error);
         });
-        closeModal();
+      closeModal();
     };
 
     const onSearchPlace = (data, details) => {
@@ -170,11 +173,11 @@ function MainScreen({ userInfo, navigation }) {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
-        <View style={styles.modalHeader}>
+          <View style={styles.modalHeader}>
             <TouchableOpacity onPress={closeModal}>
-                <Icon name="arrow-back" size={24} color="#333333" />
+              <Icon name="arrow-back" size={24} color="#333333" />
             </TouchableOpacity>
-        </View>
+          </View>
           <ScrollView nestedScrollEnabled={true}>
             <TextInput
               style={styles.input}
@@ -190,21 +193,21 @@ function MainScreen({ userInfo, navigation }) {
             ></MultiSelectExample>
 
             <View style={styles.dateTimePicker}>
-                <Text>{date.toLocaleString()}</Text>
-                <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity
-                        onPress={showDatepicker}
-                        style={styles.dateButton}
-                    >
-                        <Text style={styles.buttonText}>📆</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={showTimepicker}
-                        style={styles.dateButton}
-                    >
-                        <Text style={styles.buttonText}>    ⏰</Text>
-                    </TouchableOpacity>
-                </View>
+              <Text>{date.toLocaleString()}</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  onPress={showDatepicker}
+                  style={styles.dateButton}
+                >
+                  <Text style={styles.buttonText}>📆</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={showTimepicker}
+                  style={styles.dateButton}
+                >
+                  <Text style={styles.buttonText}> ⏰</Text>
+                </TouchableOpacity>
+              </View>
               {dateShow && (
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -257,57 +260,60 @@ function MainScreen({ userInfo, navigation }) {
 
   // ITEM Component ----------------------------------------
   const ItemView = ({ item }) => {
-     const deleteItem = (item) => {
-        // 여기에 삭제를 위한 로직을 추가하세요.
-        console.log(`Deleting item: ${item}`);
+    const deleteItem = (item) => {
+      // 여기에 삭제를 위한 로직을 추가하세요.
+      console.log(`Deleting item: ${item}`);
     };
 
     const updateItem = (item) => {
-        // 여기에 수정을 위한 로직을 추가하세요.
-        navigation.navigate("UpdateScreen", { itemData: item });
+      // 여기에 수정을 위한 로직을 추가하세요.
+      navigation.navigate("UpdateScreen", { itemData: item });
     };
     return (
-      <TouchableOpacity
-        style={styles.itemBox}
-      >
+      <TouchableOpacity style={styles.itemBox}>
         <View style={styles.valueBox}>
           <Text>{item.place}</Text>
           <Text style={styles.nickname}>{item.content}</Text>
           <Text style={styles.text}>
-                  일시:{" "}
-                  {new Date(item.times).toLocaleString("ko-KR", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </Text>
+            일시:{" "}
+            {new Date(item.times).toLocaleString("ko-KR", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Text>
         </View>
-         <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                    onPress={() => deleteItem(item)}
-                >
-                    <Text style={styles.buttonText}>❌</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => updateItem(item)}
-                >
-                    <Text style={styles.buttonText}> ⚙️</Text>
-                </TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => deleteItem(item)}>
+            <Text style={styles.buttonText}>❌</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => updateItem(item)}>
+            <Text style={styles.buttonText}> ⚙️</Text>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View>
-      <ModalComponent />
-      <FlatList data={appmtList} renderItem={ItemView} />
-      <TouchableOpacity onPress={addBtnOnPress} style={styles.button}>
-        <Text style={styles.buttonText}>추가하기 </Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={styles.container2}>
+      <Text style={styles.profile_title}>약속 리스트</Text>
+      <View style={styles.separator2} />
+      <View>
+        <ModalComponent />
+        <FlatList
+          data={appmtList}
+          renderItem={ItemView}
+          ListFooterComponent={() => (
+            <TouchableOpacity onPress={addBtnOnPress} style={styles.button}>
+              <Text style={styles.buttonText}>추가하기 </Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 

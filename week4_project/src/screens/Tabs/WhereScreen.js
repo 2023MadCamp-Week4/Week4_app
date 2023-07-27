@@ -10,6 +10,7 @@ import {
   Pressable,
   TouchableOpacity,
   Button,
+  ScrollView,
 } from "react-native";
 import axios from "axios";
 import * as Location from "expo-location";
@@ -53,7 +54,6 @@ function WhereScreen({ userInfo }) {
 
   useEffect(() => {
     if (selectedAppointment?.send_userid) {
-      console.log(selectedAppointment.send_userid);
       fetchUserName(selectedAppointment.send_userid);
     }
   }, [selectedAppointment]);
@@ -110,7 +110,6 @@ function WhereScreen({ userInfo }) {
 
   // Request 탐지
   const checkRequests = async () => {
-    console.log("CheckRequests Flagflag: ", Flagflag);
     if (Flagflag) {
       const response = await fetch(
         `${process.env.REACT_APP_server_uri}/api/check_requests?id=${userInfo.id}`
@@ -118,8 +117,7 @@ function WhereScreen({ userInfo }) {
       const data = await response.json();
       if (data && data.length > 0) {
         if (Flagflag) {
-          console.log("Request가 있습니다!");
-          console.log(data);
+          console.log("Request1이 있습니다!");
           setAlert(data[0]);
           setModalVisible2(true);
         }
@@ -135,7 +133,6 @@ function WhereScreen({ userInfo }) {
     const data = await response.json();
     if (data && data.length > 0) {
       console.log("Request2가 있습니다!");
-      console.log(data);
       setSelectedAppointment(data[0]);
       setReceivedRequest2(data[0]);
       setModalVisible3(true);
@@ -158,7 +155,6 @@ function WhereScreen({ userInfo }) {
   const handleAccept = async () => {
     setAlert(null);
     setFlagflag(false);
-    console.log("Flagflag: ", Flagflag);
     const location = await getLocationAsync();
     const response1 = await fetch(
       `${process.env.REACT_APP_server_uri}/api/update_request1`,
@@ -192,9 +188,6 @@ function WhereScreen({ userInfo }) {
         }),
       }
     );
-
-    const resData2 = await response2.json();
-    console.log(resData2);
   };
 
   // 거절 버튼 동작
@@ -319,143 +312,159 @@ function WhereScreen({ userInfo }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.profile_title}>오늘의 약속</Text>
-      <View style={styles.separator} />
-      {selectedAppointment &&
-        selectedAppointment.latitude &&
-        selectedAppointment.longitude &&
-        receivedRequest2 && (
-          <MapScreen
-            selectedAppointment={selectedItem}
-            receivedRequest2={receivedRequest2}
-          />
-        )}
-      <FlatList
-        contentContainerStyle={styles.list}
-        data={appointments}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-      />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>위치를 요청할 멤버를 고르세요.</Text>
-            {selectedAppointment?.membersInfo ? (
-              selectedAppointment?.membersInfo.map((memberInfo, index) => (
-                <Text
-                  style={styles.TextinModal}
-                  key={index}
-                  onPress={() => setSelectedMemberName(memberInfo.name)}
-                >
-                  {memberInfo.name}
-                </Text>
-              ))
-            ) : (
-              <Text>Loading...</Text>
-            )}
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>닫기</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible2}
-        onRequestClose={() => {
-          setModalVisible2(false);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>위치 요청이 발생했습니다.</Text>
-            <Text style={styles.modalText}>
-              수락하시면 내 위치가 요청자에게 발송됩니다.
-            </Text>
-            <Pressable
-              style={[styles.button2, styles.buttonClose]}
-              onPress={() => {
-                // 수락 버튼 클릭
-                handleAccept();
-                setModalVisible2(false);
-              }}
-            >
-              <Text style={styles.textStyle}>수락</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => {
-                // 거절 버튼 클릭
-                handleReject();
-                setModalVisible2(false);
-              }}
-            >
-              <Text style={styles.textStyle}>거절</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible3}
-        onRequestClose={() => {
-          setModalVisible3(false);
-        }}
-      >
-        {!loading && (
+      <View style={styles.scrollcontainer}>
+        <Text style={styles.profile_title}>오늘의 약속</Text>
+        <View style={styles.separator} />
+        {selectedAppointment &&
+          selectedAppointment.latitude &&
+          selectedAppointment.longitude &&
+          receivedRequest2 && (
+            <MapScreen
+              selectedAppointment={selectedItem}
+              receivedRequest2={receivedRequest2}
+            />
+          )}
+        <FlatList
+          contentContainerStyle={styles.list}
+          data={appointments}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>위치 정보가 도착했습니다.</Text>
-              <Text style={styles.modalText}>이름: {userName}</Text>
-              <Text style={styles.modalText}>주소: {currentPlace}</Text>
+              <Text style={styles.modalText}>
+                위치를 요청할 멤버를 고르세요.
+              </Text>
+              {selectedAppointment?.membersInfo ? (
+                selectedAppointment?.membersInfo.map((memberInfo, index) => (
+                  <Text
+                    style={styles.TextinModal}
+                    key={index}
+                    onPress={() => setSelectedMemberName(memberInfo.name)}
+                  >
+                    {memberInfo.name}
+                  </Text>
+                ))
+              ) : (
+                <Text>Loading...</Text>
+              )}
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={handleCloseModal3}
+                onPress={() => setModalVisible(!modalVisible)}
               >
                 <Text style={styles.textStyle}>닫기</Text>
               </Pressable>
             </View>
           </View>
-        )}
-      </Modal>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible2}
+          onRequestClose={() => {
+            setModalVisible2(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>위치 요청이 발생했습니다.</Text>
+              <Text style={styles.modalText}>
+                수락하시면 내 위치가 요청자에게 발송됩니다.
+              </Text>
+              <Pressable
+                style={[styles.button2, styles.buttonClose]}
+                onPress={() => {
+                  // 수락 버튼 클릭
+                  handleAccept();
+                  setModalVisible2(false);
+                }}
+              >
+                <Text style={styles.textStyle}>수락</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  // 거절 버튼 클릭
+                  handleReject();
+                  setModalVisible2(false);
+                }}
+              >
+                <Text style={styles.textStyle}>거절</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible3}
+          onRequestClose={() => {
+            setModalVisible3(false);
+          }}
+        >
+          {!loading && (
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>위치 정보가 도착했습니다.</Text>
+                <Text style={styles.modalText}>이름: {userName}</Text>
+                <Text style={styles.modalText}>주소: {currentPlace}</Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={handleCloseModal3}
+                >
+                  <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "white",
-    padding: 10,
+    flex: 1,
   },
   profile_title: {
+    padding: 20,
+    alignItems: "flex-start",
     fontSize: 25,
     fontWeight: "bold",
-    marginBottom: 10,
+  },
+  scrollcontainer: {
+    backgroundColor: "white",
+    flex: 1,
   },
   appointmentContainer: {
-    backgroundColor: "#e8eaf6",
-    borderRadius: 5,
+    backgroundColor: "#F5DA81",
+    borderRadius: 10,
     padding: 15,
-    marginBottom: 10,
-    borderColor: "#90caf9",
-    borderWidth: 1,
+    marginBottom: 15,
+    borderColor: "#F5DA81",
+    borderWidth: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   time: {
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 5,
     fontWeight: "bold",
   },
@@ -493,7 +502,8 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   textStyle: {
-    fontSize: 18,
+    fontSize: 15,
+    fontWeight: "bold",
   },
   modalView: {
     margin: 20,
@@ -528,7 +538,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "red",
   },
   TextinModal: {
     fontSize: 20,

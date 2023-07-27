@@ -9,8 +9,33 @@ export default styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  container2: {
+    backgroundColor: "white",
+    flex: 1,
+  },
+  scrollcontainer: {
+    backgroundColor: "white",
+    flex: 1,
+  },
+  profile_title: {
+    padding: 20,
+    alignItems: "flex-start",
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  separator: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "lightgray",
+  },
+  separator2: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "lightgray",
+    marginBottom: 20,
+  },
   itemBox: {
-    flexDirection:'row',
+    flexDirection: "row",
     flex: 1,
     backgroundColor: "#FFFFFF",
     borderRadius: 15,
@@ -123,6 +148,6 @@ export default styles = StyleSheet.create({
     paddingHorizontal: 15, // 원하는 패딩 크기
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
 });
