@@ -9,7 +9,8 @@ const lat= Number(selectedAppointment.latitude);
 
 const friend_lat = Number(receivedRequest2.latitude);
 const friend_lng = Number(receivedRequest2.longitude);
-
+console.log(lat, lng);
+console.log(friend_lat, friend_lng);
 
 const region = {
     latitude: lat,

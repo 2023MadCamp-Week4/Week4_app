@@ -64,6 +64,10 @@ function MainScreen({ userInfo, navigation }) {
     const [dateMode, setDateMode] = useState("date");
     const [dateShow, setdateShow] = useState(false);
 
+      // 현재 날짜와 시간을 구하는 함수
+    const getCurrentDateTime = () => {
+        return new Date();
+    };
     //on date Change
     const onChange = (event, selectedDate) => {
       const currentDate = selectedDate;
@@ -95,6 +99,12 @@ function MainScreen({ userInfo, navigation }) {
 
     const saveBtnOnPress = async () => {
         //appLocation  구하기.
+        const currentDate = getCurrentDateTime();
+        if (date < currentDate) {
+            // 모달에서 선택한 날짜와 시간이 현재 날짜와 시간보다 이전인 경우
+            alert("과거 날짜와 시간으로 약속을 추가할 수 없습니다.");
+            return;
+        }
         function formatDate(date) {
         var yyyy = date.getUTCFullYear();
         var mm = String(date.getUTCMonth() + 1).padStart(2, "0"); // months from 0 to 11
@@ -115,8 +125,7 @@ function MainScreen({ userInfo, navigation }) {
         };
                 console.log(newData, "checking Null");
         if (
-               newData.members.length === 0 || newData.times === null || newData.times === undefined ||
-                newData.place.trim() === "" || newData.content.trim() === "" || newData.location.trim() === "" 
+               newData.members.length === 0 || newData.place === "" || newData.content === "" || newData.location === "" 
         ) {
             // One of the newData values is null or undefined
             alert("모든 필드를 채워주세요!");
@@ -260,9 +269,6 @@ function MainScreen({ userInfo, navigation }) {
     return (
       <TouchableOpacity
         style={styles.itemBox}
-        onPress={() => {
-          navigation.navigate("WhereScreen", { itemData: item });
-        }}
       >
         <View style={styles.valueBox}>
           <Text>{item.place}</Text>
