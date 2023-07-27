@@ -15,6 +15,8 @@ import MultiSelectExample from "../../common/multiSelect";
 import styles from "../../styles/styles";
 import axios from "axios";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 function MainScreen({ userInfo, navigation }) {
   const [appmtList, setAppmtList] = useState([]);
@@ -92,8 +94,8 @@ function MainScreen({ userInfo, navigation }) {
     };
 
     const saveBtnOnPress = async () => {
-      //appLocation  구하기.
-      function formatDate(date) {
+        //appLocation  구하기.
+        function formatDate(date) {
         var yyyy = date.getUTCFullYear();
         var mm = String(date.getUTCMonth() + 1).padStart(2, "0"); // months from 0 to 11
         var dd = String(date.getUTCDate()).padStart(2, "0");
@@ -102,32 +104,41 @@ function MainScreen({ userInfo, navigation }) {
         var ss = String(date.getUTCSeconds()).padStart(2, "0");
 
         return yyyy + "-" + mm + "-" + dd + " " + hh + ":" + mi + ":" + ss;
-      }
-      const newDate = formatDate(date); // 출력: "2020-08-22 08:15:30"
-      const newData = {
-        members: modalMembers,
-        times: newDate,
-        place: modalPlace,
-        content: modalContent,
-        location: modalLocation,
-      };
-      console.log(newData);
-      appmtList.push(newData);
+        }
+        const newDate = formatDate(date); // 출력: "2020-08-22 08:15:30"
+        const newData = {
+            members: modalMembers,
+            times: newDate,
+            place: modalPlace,
+            content: modalContent,
+            location: modalLocation,
+        };
+                console.log(newData, "checking Null");
+        if (
+               newData.members.length === 0 || newData.times === null || newData.times === undefined ||
+                newData.place.trim() === "" || newData.content.trim() === "" || newData.location.trim() === "" 
+        ) {
+            // One of the newData values is null or undefined
+            alert("모든 필드를 채워주세요!");
+            return; // Stop the function execution
+        }
 
-      fetch(`${process.env.REACT_APP_server_uri}/api/appointment_add`, {
+        fetch(`${process.env.REACT_APP_server_uri}/api/appointment_add`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(newData),
-      })
+            body: JSON.stringify(newData),
+        })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Success:", data);
+            console.log("Success:", data);
+            appmtList.push(newData);
         })
         .catch((error) => {
-          console.error("Error:", error);
+            console.error("Error:", error);
         });
+        closeModal();
     };
 
     const onSearchPlace = (data, details) => {
@@ -150,6 +161,11 @@ function MainScreen({ userInfo, navigation }) {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
+        <View style={styles.modalHeader}>
+            <TouchableOpacity onPress={closeModal}>
+                <Icon name="arrow-back" size={24} color="#333333" />
+            </TouchableOpacity>
+        </View>
           <ScrollView nestedScrollEnabled={true}>
             <TextInput
               style={styles.input}
@@ -165,19 +181,21 @@ function MainScreen({ userInfo, navigation }) {
             ></MultiSelectExample>
 
             <View style={styles.dateTimePicker}>
-              <Text>{date.toLocaleString()}</Text>
-              <TouchableOpacity
-                onPress={showDatepicker}
-                style={styles.dateButton}
-              >
-                <Text style={styles.dateButtonText}>📆</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={showTimepicker}
-                style={styles.dateButton}
-              >
-                <Text style={styles.dateButtonText}>⏰</Text>
-              </TouchableOpacity>
+                <Text>{date.toLocaleString()}</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity
+                        onPress={showDatepicker}
+                        style={styles.dateButton}
+                    >
+                        <Text style={styles.buttonText}>📆</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={showTimepicker}
+                        style={styles.dateButton}
+                    >
+                        <Text style={styles.buttonText}>    ⏰</Text>
+                    </TouchableOpacity>
+                </View>
               {dateShow && (
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -230,6 +248,15 @@ function MainScreen({ userInfo, navigation }) {
 
   // ITEM Component ----------------------------------------
   const ItemView = ({ item }) => {
+     const deleteItem = (item) => {
+        // 여기에 삭제를 위한 로직을 추가하세요.
+        console.log(`Deleting item: ${item}`);
+    };
+
+    const updateItem = (item) => {
+        // 여기에 수정을 위한 로직을 추가하세요.
+        navigation.navigate("UpdateScreen", { itemData: item });
+    };
     return (
       <TouchableOpacity
         style={styles.itemBox}
@@ -237,11 +264,31 @@ function MainScreen({ userInfo, navigation }) {
           navigation.navigate("WhereScreen", { itemData: item });
         }}
       >
-        <View style={styles.imageContainer}></View>
         <View style={styles.valueBox}>
           <Text>{item.place}</Text>
           <Text style={styles.nickname}>{item.content}</Text>
-          <Text>{item.times}</Text>
+          <Text style={styles.text}>
+                  일시:{" "}
+                  {new Date(item.times).toLocaleString("ko-KR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Text>
+        </View>
+         <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                    onPress={() => deleteItem(item)}
+                >
+                    <Text style={styles.buttonText}>❌</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => updateItem(item)}
+                >
+                    <Text style={styles.buttonText}> ⚙️</Text>
+                </TouchableOpacity>
         </View>
       </TouchableOpacity>
     );

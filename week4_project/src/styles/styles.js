@@ -10,6 +10,7 @@ export default styles = StyleSheet.create({
     justifyContent: "center",
   },
   itemBox: {
+    flexDirection:'row',
     flex: 1,
     backgroundColor: "#FFFFFF",
     borderRadius: 15,
@@ -116,5 +117,12 @@ export default styles = StyleSheet.create({
   },
   multiSelectContainer: {
     margin: 10, // 이 값은 다른 TextInput과의 margin을 맞추기 위해 조정하세요.
+  },
+  modalHeader: {
+    paddingTop: 30, //원하는 패딩 크기
+    paddingHorizontal: 15, // 원하는 패딩 크기
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
 });
