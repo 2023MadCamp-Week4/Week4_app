@@ -107,7 +107,6 @@ function WhereScreen({ userInfo }) {
     setSelectedItem(appointment);
     setModalVisible(true);
   };
-
   // Request 탐지
   const checkRequests = async () => {
     if (Flagflag) {

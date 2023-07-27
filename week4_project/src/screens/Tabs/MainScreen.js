@@ -60,7 +60,7 @@ function MainScreen({ userInfo, navigation }) {
     const [modalContent, setModalContent] = useState("");
     const [modalMembers, setModalMembers] = useState([]);
     //date picker in modal
-    const [date, setDate] = useState(new Date(1598051730000));
+    const [date, setDate] = useState(new Date());
     const [dateMode, setDateMode] = useState("date");
     const [dateShow, setdateShow] = useState(false);
 
@@ -68,6 +68,7 @@ function MainScreen({ userInfo, navigation }) {
     const getCurrentDateTime = () => {
       return new Date();
     };
+
     //on date Change
     const onChange = (event, selectedDate) => {
       const currentDate = selectedDate;
