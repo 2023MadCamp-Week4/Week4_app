@@ -115,7 +115,7 @@ function MypageScreen({ userInfo }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollcontainer}>
+      <View style={{flex: 3}}>
         <Text style={styles.profile_title}>내 프로필</Text>
         <View style={styles.separator} />
         <View style={styles.container}>
@@ -135,42 +135,45 @@ function MypageScreen({ userInfo }) {
           </View>
           <View style={styles.information_row}>
             <Text style={styles.text2}>{"상태 메시지"}</Text>
-            <Text style={styles.text3}>{stateMessage}</Text>
+            <View style={styles.stateMessageContainer}>
+              <Text style={styles.stateMessageText}>{stateMessage}</Text>
+              <TouchableOpacity
+                style={styles.editIconContainer}
+                onPress={() => setModalVisible(true)}
+              >
+                <Text>✏️</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.btbt}>
-            <TouchableOpacity
-              style={styles.btstyle}
-              onPress={() => setModalVisible(true)}
-            >
-              <Text style={styles.buttonText}>상태 메시지 변경</Text>
-            </TouchableOpacity>
-          </View>
-
           <View style={styles.separator2} />
         </View>
-        <View>
-          <Text style={styles.modalText2}>이전 약속</Text>
-        </View>
-        <View>
-          {pastAppointments.map((appointment, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => openAppointmentDetail(appointment)}
-            >
-              <Text style={styles.appointmentText}>
-                {new Date(appointment.times).toLocaleString("ko-KR", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-                {" - " + appointment.place}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+      </View>
+      <View style={{flex: 2}}>
+          <View>
+            <Text style={styles.modalText2}>이전 약속</Text>
+          </View>
+          <ScrollView style={styles.scrollcontainer}>
+            <View>
+              {pastAppointments.map((appointment, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => openAppointmentDetail(appointment)}
+                >
+                  <Text style={styles.appointmentText}>
+                    {new Date(appointment.times).toLocaleString("ko-KR", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                    {" - " + appointment.place}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+      </View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -187,10 +190,15 @@ function MypageScreen({ userInfo }) {
               value={stateMessage}
               onChangeText={setStateMessage}
             />
-            <View style={styles.buttonContainer}>
-              <Button title="완료" onPress={updateStateMessage} />
-              <Button title="취소" onPress={() => setModalVisible(false)} />
-            </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.buttonStyle} onPress={updateStateMessage}>
+              <Text style={styles.buttonText}>완료</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonStyle} onPress={() => setModalVisible(false)}>
+              <Text style={styles.buttonText}>취소</Text>
+            </TouchableOpacity>
+          </View>
           </View>
         </View>
       </Modal>
@@ -230,10 +238,7 @@ function MypageScreen({ userInfo }) {
                 <Text style={styles.text}>
                   내용: {selectedAppointment.content}
                 </Text>
-                <Text style={styles.text}>
-                  위치:{" "}
-                  {`위도: ${selectedAppointment.location.latitude}, 경도: ${selectedAppointment.location.longitude}`}
-                </Text>
+                
               </View>
             ) : null}
             <View style={styles.buttonContainer}>
@@ -247,34 +252,41 @@ function MypageScreen({ userInfo }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
+   container: {
+    backgroundColor:'white',
     flex: 1,
-    marginLeft:10,
-    marginRight:10
   },
+  profile_title: {
+    marginTop:20,
+    padding: 20,
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  
   centercontainer: {
     backgroundColor: "white",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: "7%",
+    marginTop:40
+   },
+  halfContainer:{
+    flex:1
   },
   scrollcontainer: {
     backgroundColor: "white",
     flex: 1,
   },
-  profile_title: {
-    padding: 20,
-    alignItems: "flex-start",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
+
   modalText2: {
-    fontSize: 15,
+    fontSize: 18,
     marginBottom: 20,
     textAlign: "center",
     fontWeight: "bold",
+  },
+  modalText: {
+    fontSize: 18,
+    textAlign: "center",
   },
   information_row: {
     flexDirection: "row",
@@ -290,21 +302,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    textAlign: "center",
+    textAlign: "left",
     marginBottom: 20,
-    fontSize: 15,
+    fontSize: 17,
     color: "gray",
   },
   text2: {
     textAlign: "center",
-    marginBottom: 20,
-    fontSize: 15,
+    marginBottom: 10,
+    fontSize: 17,
     color: "gray",
   },
   text3: {
     textAlign: "center",
-    marginBottom: 20,
-    fontSize: 15,
+    marginBottom: 10,
+    fontSize: 17,
     color: "black",
   },
   separator: {
@@ -326,7 +338,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    margin: 20,
+    margin: 15,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 25,
@@ -353,14 +365,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
     textAlign: "center",
   },
   appointmentText: {
     textAlign: "left",
     marginHorizontal: 40,
-    marginBottom: 15,
-    fontSize: 20,
+    marginBottom: 11,
+    fontSize: 17,
     color: "gray",
   },
   textinputView: {
@@ -388,6 +399,43 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  stateMessageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  stateMessageText: {
+    fontSize: 17,
+    color: "black",
+    marginBottom: 10,
+
+  },
+  editIconContainer: {
+    marginBottom: 10,
+    marginLeft: 10,
+    padding: 5,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: 20,
+},
+buttonStyle: {
+  backgroundColor: "gray",
+  padding: 10,
+  borderRadius: 5,
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginHorizontal: 10,
+},
+buttonText: {
+  color: 'white',
+  fontSize: 18,
+  textAlign: 'center',
+}
 });
 
 export default MypageScreen;
