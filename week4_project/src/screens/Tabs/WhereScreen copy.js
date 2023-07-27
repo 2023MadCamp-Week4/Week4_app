@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import axios from "axios";
 import * as Location from "expo-location";
-import MapScreen from "./Map";
 
 function WhereScreen({ userInfo }) {
   const [appointments, setAppointments] = useState([]);
@@ -311,9 +310,6 @@ function WhereScreen({ userInfo }) {
     <SafeAreaView style={styles.container}>
       <Text style={styles.profile_title}>오늘의 약속</Text>
       <View style={styles.separator} />
-      {selectedAppointment && selectedAppointment.latitude && selectedAppointment.longitude && receivedRequest2 &&
-        <MapScreen selectedAppointment={selectedAppointment} receivedRequest2={receivedRequest2}/>
-      }
       <FlatList
         contentContainerStyle={styles.list}
         data={appointments}
@@ -321,6 +317,7 @@ function WhereScreen({ userInfo }) {
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
       />
+
       <Modal
         animationType="slide"
         transparent={true}
